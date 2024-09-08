@@ -46,7 +46,8 @@ class SceneHandler:
         denormalized_normals = np.zeros((len(indices), 3), dtype=np.float32)
         denormalized_normals = normals.reshape(-1, 3)[indices]
         mesh.normals_split_custom_set(denormalized_normals)
-        mesh.use_auto_smooth = True
+        if hasattr(mesh, 'use_auto_smooth'):
+            mesh.use_auto_smooth = True
 
         mesh["groups"] = groups
         mesh["face_ids"] = face_ids
@@ -125,7 +126,8 @@ class SceneHandler:
 
         mesh.update()
 
-        mesh.use_auto_smooth = True
+        if hasattr(mesh, 'use_auto_smooth'):
+            mesh.use_auto_smooth = True
         denormalized_normals = np.zeros((len(indices), 3), dtype=np.float32)
         denormalized_normals = normals.reshape(-1, 3)[indices]
         mesh.normals_split_custom_set(denormalized_normals)
@@ -168,7 +170,7 @@ class SceneHandler:
         group = self.files[filename][PlasticityIdUniquenessScope.GROUP].pop(
             plasticity_id, None)
         if group:
-            bpy.data.groups.remove(group, do_unlink=True)
+            bpy.data.collections.remove(group, do_unlink=True)
 
     def __replace_objects(self, filename, inbox_collection, version, objects):
         scene = bpy.context.scene
